@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Turnpike Gateway
+
+AI API Gateway & Cost Intelligence Platform — route, monitor, and control AI API spend.
+
+## Features
+
+- **AI Proxy**: OpenAI and Anthropic-compatible endpoints with streaming support
+- **Usage Tracking**: Token counting, cost calculation, per-model and per-key analytics
+- **Dashboard**: Spend visualization by model, API key, and time period
+- **Stripe Billing**: Starter ($99/mo) and Pro ($299/mo) subscription tiers
+- **API Key Management**: SHA-256 hashed keys with per-provider upstream routing
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router, Edge Functions)
+- **Database**: Neon Postgres (serverless)
+- **Cache**: Upstash Redis
+- **Payments**: Stripe
+- **Deployment**: Vercel
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js 20+
+- Neon Postgres database
+- Upstash Redis instance
+- Stripe account (test mode)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone and install:
+   ```bash
+   git clone https://github.com/Nollio/turnpike-gateway.git
+   cd turnpike-gateway
+   npm install
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Copy environment variables:
+   ```bash
+   cp .env.example .env.local
+   ```
 
-## Learn More
+3. Fill in your credentials in `.env.local`
 
-To learn more about Next.js, take a look at the following resources:
+4. Run the database schema:
+   ```bash
+   psql $DATABASE_URL -f schema.sql
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Start the dev server:
+   ```bash
+   npm run dev
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## API Endpoints
 
-## Deploy on Vercel
+### Proxy
+- `POST /api/v1/chat/completions` — OpenAI-compatible proxy
+- `POST /api/v1/messages` — Anthropic-compatible proxy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Management
+- `GET/POST /api/keys` — API key management
+- `GET /api/usage` — Usage analytics
+- `POST /api/billing/checkout` — Stripe checkout
+- `POST /api/webhooks/stripe` — Stripe webhook handler
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+Proprietary — Turnpike / Nollio Labs
