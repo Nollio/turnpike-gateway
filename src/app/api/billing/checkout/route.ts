@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getDb } from "@/lib/db";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+function getStripe() {
+  return new Stripe(process.env.STRIPE_SECRET_KEY!);
+}
 
 export async function POST(request: NextRequest) {
   const orgId = request.headers.get("x-org-id");
@@ -24,6 +26,8 @@ export async function POST(request: NextRequest) {
   }
 
   const org = orgs[0];
+
+  const stripe = getStripe();
 
   // Get or create Stripe customer
   let customerId = org.stripe_customer_id;
